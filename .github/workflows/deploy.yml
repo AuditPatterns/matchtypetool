@@ -1,0 +1,36 @@
+# .github/workflows/deploy.yml
+
+name: Deploy to Digital Ocean
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # (Optional) Build step
+      # - name: Build static files
+      #   run: |
+      #     npm install
+      #     npm run build
+
+      - name: Deploy files
+        # Use the secrets from the organization level
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Automatically get the repository name (e.g., "offer-a")
+            # This line removes the need for a PROJECT_NAME secret!
+            REPO_NAME=$(echo ${{ github.repository }} | cut -d'/' -f2)
+
+            # Deploy to the directory named after the repository
+            rsync -avz --delete ./ /var/www/$REPO_NAME/
