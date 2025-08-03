@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <title>Keyword Match Type Converter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Keyword Match Type Converter</h1>
+            <p>Convert keywords between broad, phrase, and exact match types</p>
+        </header>
+
+        <main>
+            <div class="input-section">
+                <label for="keywordInput">Enter Keywords:</label>
+                <textarea 
+                    id="keywordInput" 
+                    placeholder="Enter keywords separated by commas or new lines. Examples:&#10;[exact keyword]&#10;&quot;phrase keyword&quot;&#10;broad keyword"
+                    rows="8"
+                ></textarea>
+                <div class="input-info">
+                    <p>Keywords can be mixed match types. Invalid characters will be flagged.</p>
+                </div>
+            </div>
+
+            <div class="conversion-section">
+                <h3>Convert to:</h3>
+                <div class="button-group">
+                    <button id="convertBroad" class="convert-btn broad-btn">Broad Match</button>
+                    <button id="convertPhrase" class="convert-btn phrase-btn">Phrase Match</button>
+                    <button id="convertExact" class="convert-btn exact-btn">Exact Match</button>
+                </div>
+            </div>
+
+            <div class="output-section">
+                <div class="output-header">
+                    <h3>Converted Keywords</h3>
+                    <div class="output-actions">
+                        <button id="copyBtn" class="action-btn">Copy</button>
+                        <button id="clearBtn" class="action-btn">Clear</button>
+                    </div>
+                </div>
+                <div class="output-container">
+                    <textarea id="keywordOutput" readonly rows="8" placeholder="Converted keywords will appear here..."></textarea>
+                </div>
+                <div class="output-stats">
+                    <span id="keywordCount">0 keywords</span>
+                    <span id="duplicateCount">0 duplicates removed</span>
+                    <span id="invalidCount">0 invalid keywords</span>
+                </div>
+            </div>
+
+            <div class="validation-section">
+                <h3>Validation Results</h3>
+                <div id="validationResults" class="validation-results">
+                    <p class="no-results">No validation results yet</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Invalid characters: ! @ % , ( ) = { } ; ~ ` < > ? \ |</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
