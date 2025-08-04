@@ -1,41 +1,49 @@
 # .github/workflows/deploy.yml
+# This workflow deploys your static site to a Digital Ocean server when you push to the 'main' branch.
 
 name: Deploy to Digital Ocean
 
 on:
+  # Triggers the workflow on push events for the main branch
   push:
     branches:
       - main
 
 jobs:
   deploy:
+    # The type of runner that the job will run on
     runs-on: ubuntu-latest
-    # This tells the job to use the 'Production' environment and its secrets.
-    # It also enables protection rules, like only allowing the 'main' branch to deploy.
-    environment: Production
+
     steps:
+      # Step 1: Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Optional Build Step: Uncomment this if your site needs to be built.
+      # (Optional) Build Step: If your site needs a build process (like with React, Vue, or SASS),
+      # you would uncomment this section.
       # - name: Build static files
       #   run: |
       #     npm install
       #     npm run build
       
-      - name: Deploy files to server
-        uses: appleboy/ssh-action@master
+      # Step 2: This is the corrected deployment step.
+      # It securely copies files from the GitHub Runner to your server using SCP.
+      - name: Deploy files to server via SCP
+        # We are now using 'scp-action', which is designed for copying files.
+        uses: appleboy/scp-action@v0.1.4
         with:
-          # These secrets must be defined in your 'Production' environment settings
+          # These secrets must be configured in your repository's settings:
+          # Settings > Secrets and variables > Actions
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
           # 'source' is the directory in your repository you want to copy.
           # Use "./" for the entire repository.
-          # If you have a build step, you might use "dist/" or "build/".
+          # If you have a build step that outputs to a 'dist' folder, you would change this to "dist/".
           source: "./"
 
           # 'target' is the destination path on your server.
-          # This automatically uses your repository's name for the folder.
+          # This automatically uses your repository's name (e.g., "my-new-offer")
+          # to create the correct path (e.g., "/var/w/www/my-new-offer").
           target: "/var/www/${{ github.event.repository.name }}"
