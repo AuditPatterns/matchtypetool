@@ -252,15 +252,23 @@ class KeywordConverter {
             return;
         }
 
+        // Filter to only show validation errors (invalid keywords)
+        const errorResults = results.filter(result => !result.isValid);
+        
+        if (errorResults.length === 0) {
+            container.innerHTML = '<p class="no-results">✓ All keywords are valid</p>';
+            return;
+        }
+
         // Security: Use textContent instead of innerHTML where possible
         const fragment = document.createDocumentFragment();
         
-        results.forEach(result => {
+        errorResults.forEach(result => {
             const div = document.createElement('div');
             div.className = `validation-item ${result.type}`;
             
             const statusSpan = document.createElement('strong');
-            statusSpan.textContent = result.isValid ? '✓ Valid' : '✗ Invalid';
+            statusSpan.textContent = '✗ Invalid';
             
             const errorSpan = document.createElement('span');
             if (result.error) {
