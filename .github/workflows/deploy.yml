@@ -31,6 +31,7 @@ jobs:
       - name: Deploy files to server via SCP
         # We are now using 'scp-action', which is designed for copying files.
         uses: appleboy/scp-action@v0.1.4
+        continue-on-error: true
         with:
           # These secrets must be configured in your repository's settings:
           # Settings > Secrets and variables > Actions
